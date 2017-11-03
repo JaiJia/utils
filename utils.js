@@ -106,3 +106,59 @@ function isEmail(str) {
     return reg.test(str);
 }
 
+// 为element增加一个样式名为newClassName的新样式
+function addClass(element, newClassName) {
+    if(!element.className) {
+        element.className = newClassName;
+    } else {
+        element.className += newClassName;
+    }
+    return true;
+}
+
+// 移除element中的样式oldClassName
+function removeClass(element, oldClassName) {
+    var str = element.className,
+        arr = str.split(" "),
+        index = arr.indexOf(oldClassName);
+    if (index === -1) {
+        console.warn(element + "中没有Class" + oldClassName);
+        return false;
+    } else {
+        arr.splice(index, 1);
+        element.className = arr.join(" ");
+        return true;
+    }
+}
+
+// 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
+function isSiblingNode(element, siblingNode) {
+    var arr = element.parentNode.childNodes;
+    for (var i = 0; i < arr.length; i++) {
+        if(arr[i] === siblingNode) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// 获取element相对于浏览器窗口的位置，返回一个对象{x, y}
+function getPosition(element) {
+    var actualLeft = element.offsetLeft;
+    var actualTop = element.offsetTop;
+    var current = element.offsetParent;
+
+    while(current !== null) {
+        actualLeft += current.offsetLeft;
+        actualTop += current.offsetTop;
+        current = current.offsetParent;
+    }
+    return {
+        X: actualLeft,
+        Y: actualTop
+    };
+}
+
+function $(selector) {
+    return document.querySelectorAll(selector);
+}
