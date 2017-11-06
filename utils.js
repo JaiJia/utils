@@ -159,6 +159,57 @@ function getPosition(element) {
     };
 }
 
+// 实现一个mini $，它和之前的$是不兼容的
 function $(selector) {
-    return document.querySelectorAll(selector);
+    if (!selector) { return null; }
+    selector = selector.trim();
+    var arr = selector.split(" ");
+    var len = arr.length;
+    var i;
+    item = arguments[1] || document;
+    if (len > 1) {
+        for (i = 0; i < $(arr[i]).length; i++) {
+            // 递归解析 ".fir #sec thi []"
+            return ($(arr.slice(1).toString(), $(arr[0])[i]));
+        }
+    } else {
+        switch (selector[0]) {
+            case ".":
+                {
+                    return item.getElementsByClassName(selector.slice(1));
+                }
+            case "#":
+                {
+                    return item.getElementById(selector.slice(1));
+                }
+            case "[":
+                {
+                    if (/^\[[A-Za-z0-9_-\S]+\]$/.test(selector)) {
+                        selector = selector.slice(1, selector.length - 1);
+                        selector = selector.split("=");
+                        var eles = item.getElementsByTagName("*");
+                        var att = selector[0];
+                        var val = selector[1];
+                        if (val) {
+                            for (i = 0; i < eles.length; i++) {
+                                if (eles[i].getAttribute(att) === val) {
+                                    return eles[i];
+                                }
+                            }
+                        } else {
+                            for (i = 0; i < eles.length; i++) {
+                                if (eles[i].getAttribute(att)) {
+                                    return eles[i];
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            default:
+                {
+                    return item.getElementsByTagName(selector);
+                }
+        }
+    }
 }
