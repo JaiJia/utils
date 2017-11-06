@@ -1,39 +1,6 @@
 /*jshint esversion: 6 */
 
 
-
-// 异步文件上传组件 只支持单文件上传
-/*
-   obj: {
-        url: "www.xxx.com",
-        file: $(button),
-        filename: "file",
-        success: function(data) {
-            ...
-        }
-    }
-*/
-function fileupload(obj) {
-    if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
-        req = new XMLHttpRequest();
-    } else if (window.ActiveXObject) { // IE 6 and older
-        req = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    var url = obj.url;
-    var formdata = new FormData();
-    formdata.append(obj.filename, this.file);
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
-        if (req.readyState === 4) {
-            if (req.status === 200) {
-                obj.success();
-            }
-        }
-    };
-    req.open("POST", obj.url);
-    req.send(formdata);
-}
-
 // 判断arr是否为一个数组，返回一个bool值
 function isArray(arr) {
     if (Array.isArray) {
@@ -44,6 +11,11 @@ function isArray(arr) {
         };
         return Array.isArray(arr);
     }
+}
+
+// 类数组转换数组
+function toArray(arg) {
+    return Array.prototype.slice.call(arg);
 }
 
 // 判断fn是否为一个函数，返回一个bool值
@@ -108,7 +80,7 @@ function isEmail(str) {
 
 // 为element增加一个样式名为newClassName的新样式
 function addClass(element, newClassName) {
-    if(!element.className) {
+    if (!element.className) {
         element.className = newClassName;
     } else {
         element.className += newClassName;
@@ -135,7 +107,7 @@ function removeClass(element, oldClassName) {
 function isSiblingNode(element, siblingNode) {
     var arr = element.parentNode.childNodes;
     for (var i = 0; i < arr.length; i++) {
-        if(arr[i] === siblingNode) {
+        if (arr[i] === siblingNode) {
             return true;
         }
     }
@@ -148,7 +120,7 @@ function getPosition(element) {
     var actualTop = element.offsetTop;
     var current = element.offsetParent;
 
-    while(current !== null) {
+    while (current !== null) {
         actualLeft += current.offsetLeft;
         actualTop += current.offsetTop;
         current = current.offsetParent;
@@ -213,3 +185,30 @@ function $(selector) {
         }
     }
 }
+
+// 封装事件函数
+$.on = function addEvent(selector, event, listener) {
+    selector.addEventListener(event, listener);
+};
+$.un = function removeEvent(selector, event, listener) {
+    selector.removeEventListener(event, listener);
+};
+$.click = function addClickEvent(selector, listener) {
+    selector.addEventListener("click", listener);
+};
+$.enter = function addEnterEvent(selector, listener) {
+    selector.addEventListener((e) => {
+        if (e.keyword === 13) {
+            listener.call(item, e);
+        }
+    });
+};
+
+// 事件代理
+$.delegate = function(selector, tag, event, listener) {
+    selector.addEventListener(event, function(event) {
+        if (event.target.nodeName.toLowerCase() === tag.toLowerCase()) {
+            listener.call(tag, event);
+        }
+    });
+};
