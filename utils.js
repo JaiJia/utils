@@ -91,16 +91,23 @@ function addClass(element, newClassName) {
 // 移除element中的样式oldClassName
 function removeClass(element, oldClassName) {
     var str = element.className,
-        arr = str.split(" "),
-        index = arr.indexOf(oldClassName);
-    if (index === -1) {
-        console.warn(element + "中没有Class" + oldClassName);
-        return false;
+        arr,
+        index;
+    if (!str || str.indexOf(oldClassName) === -1) {
+        return null;
     } else {
-        arr.splice(index, 1);
-        element.className = arr.join(" ");
-        return true;
+        if (str.indexOf(" ") === -1) {
+            element.className = "";
+        } else {
+            arr = str.split(" ");
+            index = arr.indexOf(oldClassName);
+            if (index !== -1) {
+                arr.splice(index, 1);
+                element.className = arr.join(" ");
+            }
+        }
     }
+    return null;
 }
 
 // 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
@@ -112,6 +119,17 @@ function isSiblingNode(element, siblingNode) {
         }
     }
     return false;
+}
+
+function enumChildNodes(parentNode) {
+    var arr = [];
+    function enumNodes(parentNode) {
+        for (var i = 0; i < parentNode.childNodes.length; i++) {
+            arr[arr.length] = parentNode.childNodes[i];
+            enumNodes(parentNode.childNodes[i]);
+        }
+    }
+    return arr;
 }
 
 // 获取element相对于浏览器窗口的位置，返回一个对象{x, y}
