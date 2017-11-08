@@ -80,12 +80,14 @@ function isEmail(str) {
 
 // 为element增加一个样式名为newClassName的新样式
 function addClass(element, newClassName) {
-    if (!element.className) {
-        element.className = newClassName;
-    } else {
-        element.className += newClassName;
+    var str = element.className;
+    if (!str) {
+        str = newClassName;
+    } else if (!hasClass(element, newClassName)) {
+        str += " " + newClassName;
+        element.className = str;
     }
-    return true;
+    return null;
 }
 
 // 移除element中的样式oldClassName
@@ -96,18 +98,37 @@ function removeClass(element, oldClassName) {
     if (!str || str.indexOf(oldClassName) === -1) {
         return null;
     } else {
-        if (str.indexOf(" ") === -1) {
-            element.className = "";
-        } else {
             arr = str.split(" ");
             index = arr.indexOf(oldClassName);
             if (index !== -1) {
                 arr.splice(index, 1);
                 element.className = arr.join(" ");
-            }
         }
     }
     return null;
+}
+
+// 父元素下后代元素之间转移class
+function transferClass(parentEle, className, e) {
+    enumChildNodes(parentEle).forEach((item) => {
+        removeClass(item, className);
+    });
+    addClass(e.target, className);
+    return null;
+}
+
+// 判断元素是否含有目标Class，返回bool
+function hasClass(element, tarClassName) {
+    return element.className.indexOf(tarClassName) !== -1;
+}
+
+// 切换元素显示
+function toggleShow(element) {
+    if (($(".detail-show")[0].currentStyle? $(".detail-show")[0].currentStyle : window.getComputedStyle($(".detail-show")[0], null)).display === "block") {
+        element.style.display = "none";
+    } else {
+        element.style.display = "block";
+    }
 }
 
 // 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
@@ -121,14 +142,16 @@ function isSiblingNode(element, siblingNode) {
     return false;
 }
 
+// 返回该元素下所有后代元素
 function enumChildNodes(parentNode) {
     var arr = [];
-    function enumNodes(parentNode) {
-        for (var i = 0; i < parentNode.childNodes.length; i++) {
-            arr[arr.length] = parentNode.childNodes[i];
-            enumNodes(parentNode.childNodes[i]);
+    (function enumNodes(parentNode) {
+        var nodeList = parentNode.childNodes;
+        for (var i = 0; i < nodeList.length; i++) {
+            arr.push(nodeList[i]);
+            enumNodes(nodeList[i]);
         }
-    }
+    })(parentNode);
     return arr;
 }
 
