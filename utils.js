@@ -122,7 +122,7 @@ function hasClass(element, tarClassName) {
     return element.className.indexOf(tarClassName) !== -1;
 }
 
-// 切换元素显示
+// 切换元素显示隐藏
 function toggleShow(element) {
     if (($(".detail-show")[0].currentStyle? $(".detail-show")[0].currentStyle : window.getComputedStyle($(".detail-show")[0], null)).display === "block") {
         element.style.display = "none";
