@@ -56,7 +56,7 @@ function uniqArray(arr) {
 // 对字符串头尾进行空格字符的去除、包括全角半角空格、Tab等，返回一个字符串
 // 尝试使用一行简洁的正则表达式完成该题目
 function trim(str) {
-    return str.replace(/\s+/g, "");
+    return str.toString().replace(/\s+/g, "");
 }
 
 // 实现一个遍历数组的方法，针对数组中每一个元素执行fn函数，并将数组索引和元素作为参数传递
@@ -175,7 +175,7 @@ function getPosition(element) {
 // 实现一个mini $，它和之前的$是不兼容的
 function $(selector) {
     if (!selector) { return null; }
-    selector = selector.trim();
+    selector = trim(selector);
     var arr = selector.split(" ");
     var len = arr.length;
     var i;
