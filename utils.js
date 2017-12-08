@@ -255,5 +255,3 @@ $.delegate = function(selector, tag, event, listener) {
 };
 
 //
-//
-function() {}
