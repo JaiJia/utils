@@ -6,7 +6,7 @@ function isArray(arr) {
     if (Array.isArray) {
         return Array.isArray(arr);
     } else {
-        Array.isArray = function(arg) {
+        Array.isArray = function (arg) {
             return Object.prototype.toString.call(arg) === '[object Array]';
         };
         return Array.isArray(arr);
@@ -98,11 +98,11 @@ function removeClass(element, oldClassName) {
     if (!str || str.indexOf(oldClassName) === -1) {
         return null;
     } else {
-            arr = str.split(" ");
-            index = arr.indexOf(oldClassName);
-            if (index !== -1) {
-                arr.splice(index, 1);
-                element.className = arr.join(" ");
+        arr = str.split(" ");
+        index = arr.indexOf(oldClassName);
+        if (index !== -1) {
+            arr.splice(index, 1);
+            element.className = arr.join(" ");
         }
     }
     return null;
@@ -124,7 +124,7 @@ function hasClass(element, tarClassName) {
 
 // 切换元素显示隐藏
 function toggleShow(element) {
-    if (($(".detail-show")[0].currentStyle? $(".detail-show")[0].currentStyle : window.getComputedStyle($(".detail-show")[0], null)).display === "block") {
+    if (($(".detail-show")[0].currentStyle ? $(".detail-show")[0].currentStyle : window.getComputedStyle($(".detail-show")[0], null)).display === "block") {
         element.style.display = "none";
     } else {
         element.style.display = "block";
@@ -174,7 +174,9 @@ function getPosition(element) {
 
 // 实现一个mini $，它和之前的$是不兼容的
 function $(selector) {
-    if (!selector) { return null; }
+    if (!selector) {
+        return null;
+    }
     selector = trim(selector);
     var arr = selector.split(" ");
     var len = arr.length;
@@ -246,8 +248,8 @@ $.enter = function addEnterEvent(selector, listener) {
 };
 
 // 事件代理
-$.delegate = function(selector, tag, event, listener) {
-    selector.addEventListener(event, function(event) {
+$.delegate = function (selector, tag, event, listener) {
+    selector.addEventListener(event, function (event) {
         if (event.target.nodeName.toLowerCase() === tag.toLowerCase()) {
             listener.call(tag, event);
         }
